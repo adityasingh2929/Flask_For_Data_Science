@@ -42,20 +42,18 @@ Key intuition:
 
 # Now lets create a flask server
 
-from flask import Flask
+from flask import Flask, render_template
 
-app = Flask(__name__)
+app = Flask(__name__,
+            static_folder='assets',
+            static_url_path='/files/')
 
 @app.route('/')
-
 def hello_one():
-    hello_two()
-    return "<p> BYE ADITYA! </p>"
-
-def hello_two():
-    # return "<p> BYE ADITYA! </p>"
-    print("hello")   # prints hello in your terminal (not in browser's console.).
-
+    name = "ADITYA SINGH"
+    lst = [11,22,33,44,55,66,77]
+    yolo = "<b> HELLO WORLD! </b>"
+    return render_template("index.html", nm=name, lst=lst, html_txt=yolo )  # goes straight to template folder to look for this "index.html" file.
 '''
 See, flask only show/execute those function's output (return) that are mapped with a specific route. 
 In case 1 you can see that only hello_one() gets executed, hello_two() does not get executed (not even on the terminal/console).
@@ -81,7 +79,18 @@ In case 2 you can see that still only hello_one() gets executed, hello_two() is 
             #return "<p> BYE ADITYA! </p>"   # this will not be shown anywhere as it'll be ignored for the browser..and it wont be printed in the terminal either.
             print("hello") # prints hello in your terminal (not in browser's console.).
 
-In case 3 you can see that both the function have been executed/shown on the browser page, as this time the function "hello_two" was called in the return line, i.e this time its execution was used or was necessary in order for the mapped function's execution line (return line)  [WE'VE CODED CASE 3 ABOVE]
+In case 3 you can see that both the function have been executed/shown on the browser page, as this time the function "hello_two" was called in the return line, i.e this time its execution was used or was necessary in order for the mapped function's execution line (return line) 
+    case 3 code:     (for you to test)
+
+        @app.route('/')
+
+        def hello_one():
+            return hello_two() + "<p> BYE ADITYA! </p>"
+
+        def hello_two():
+            # return "<p> BYE ADITYA! </p>"
+            print("hello")   # prints hello in your terminal (not in browser's console.).
+    
 '''
 
 
@@ -105,5 +114,92 @@ Let us understand how this flask server code works:
 OK ONE MORE THING TO KNOW, its that:
 
     Flask only serves the client side script...to the browser, then the browser executes it, not the FLASK server.
+
+'''
+
+
+
+'''
+
+Now we're learning how to modify the default static files containing folder [called 'static'] and how to modify the default url path shown ['static/'] on the webpage in order to get the static files.
+
+we'll be using the url_for('static', file_name='xyz.abc') in order to access any static file irrespective of the folder its in (modified name or static) and irrespective of the path we'll need to take to access it (could be static or modified name or even other name (even though we got a modified name...i.e by overriding it.))...its considered a good practice as we're not hard coding the folder name or its access url...so even if they're changed...our code is bulletproof and versatile.
+
+
+'''
+
+
+'''
+
+GET AND POST IN FLASK:
+
+    1️⃣ GET request (default behavior)
+
+    A GET request is used to request a resource.
+    In Flask, when you define a route like:
+
+    @app.route("/login")
+    def login():
+        return render_template("login.html")
+
+    Flask implicitly assumes methods=["GET"].
+
+    This means:
+        - User types /login in the browser
+        - Browser sends a GET request
+        - Flask runs the mapped function
+        - You usually return a template or some data
+
+    So yes, GET is commonly used to load a page / URL.
+
+    
+    2️⃣ POST request (form submission or data sending)
+
+        A POST request is used to send data to the server.
+
+        In Flask, POST has two things to care about (you said this correctly):
+            1. Where the data is submitted (URL)
+            2. What to do with the submitted data
+
+        <form method="POST" action="/login">
+        <input name="username">
+        <input name="password">
+        <button type="submit">Login</button>
+        </form>
+
+        action="/login" → URL the data goes to
+
+        method="POST" → type of request
+
+
+    3️⃣ Handling GET and POST in the same route (very common)
+
+        @app.route("/login", methods=["GET", "POST"])
+        def login():
+            if request.method == "POST":
+                username = request.form["username"]
+                password = request.form["password"]
+                # process data here
+                return "Logged in"
+
+            # GET request
+            return render_template("login.html")
+
+        What happens:
+            GET /login
+                Shows the form
+            
+            POST /login
+                Submits form data
+                Executes POST logic
+
+            This is the standard Flask pattern.
+
+'''
+
+
+'''
+
+Jinja template prevents html injection, i.e it does not accept the html code in variables and just treats it as a normal string, if we want the html to work then we use ' | safe ' .
 
 '''
