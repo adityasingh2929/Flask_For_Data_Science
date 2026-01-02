@@ -98,3 +98,12 @@ Let us understand how this flask server code works:
 4. when the app is run via "app.run(debug=True)" .......
 4. upon hitting that route, the functions inside it will be executed and we'll see output depending on what we wrote.
 '''
+
+
+'''
+
+OK ONE MORE THING TO KNOW, its that:
+
+    Flask only serves the client side script...to the browser, then the browser executes it, not the FLASK server.
+
+'''
