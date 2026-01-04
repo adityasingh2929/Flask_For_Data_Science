@@ -42,19 +42,39 @@ Key intuition:
 
 # Now lets create a flask server
 
-from flask import Flask, render_template
+from flask import Flask, render_template, redirect, flash, request, jsonify
 
 app = Flask(__name__,
             static_folder='assets',
             static_url_path='/files/')
 
-@app.route('/')
+app.secret_key = 'secret_key'
+
+@app.route('/', methods=["GET","POST"])
 def hello_one():
     name = "ADITYA SINGH"
     lst = [11,22,33,44,55,66,77]
     yolo = "<b> HELLO WORLD! </b>"
-    return render_template("index.html", nm=name, lst=lst, html_txt=yolo )  # goes straight to template folder to look for this "index.html" file.
-'''
+    flash("welcome to homepage.")
+    return redirect('/about') # this will take us to the about route and load hello_two function.
+    return render_template("home.html", nm=name, lst=lst, html_txt=yolo )  # goes straight to template folder to look for this "index.html" file.
+
+@app.route('/about', methods=["GET","POST"])
+def hello_two():
+    flash("Welcome to about page")
+    name = request.args.get("nm", default="noname")
+    lang = request.args.get("lng",default="nolang")
+    # some machine learning or sql process here that generates a data.
+    return render_template("about.html", name_var=name,lang_var=lang)
+
+
+@app.route('/api', methods=["GET","POST"])
+def api_data():
+    # some ml or sql backend process here that generates the data, for now we'll use synthetic data.
+    data = {"Output": 55, "Accuracy": 95.58}
+    return jsonify(data), 200
+
+''' 
 See, flask only show/execute those function's output (return) that are mapped with a specific route. 
 In case 1 you can see that only hello_one() gets executed, hello_two() does not get executed (not even on the terminal/console).
     case 1 code: (for you to test)
@@ -201,5 +221,50 @@ GET AND POST IN FLASK:
 '''
 
 Jinja template prevents html injection, i.e it does not accept the html code in variables and just treats it as a normal string, if we want the html to work then we use ' | safe ' .
+
+'''
+
+
+'''
+
+Template inheritance in flask allows us to create a base template that has a certain design and then we can build custom pages of the website based off of that base template.
+
+'''
+
+
+'''
+
+Message flashing is used to send mssg/notification/updates/alerts from the backend to the frontend.
+
+'''
+
+
+'''
+
+Query Parameters are just taking user input values (from url) and putting them to use in backend and then showing related output in the frontend (using jinja 2 template).
+
+'''
+
+
+'''
+
+APIs are used for data exchange btw frontend and backend as per the service i.e called for. It happens in json format.
+
+along with passing api data we also pass certain http status codes which basically tell the browser what happened when it tried talking to the website/api
+
+
+200 – Everything OK
+
+201 – Created successfully
+
+400 – Bad input
+
+401 vs 403 – Not authenticated vs not allowed
+
+404 – Not found
+
+500 – Server messed up
+
+503 – Server temporarily unavailable
 
 '''

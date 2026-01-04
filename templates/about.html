@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}ABOUT{% endblock %}
+
+
+{% block content %}Welcome to AboutPage
+
+<form action="/" method="post">
+    <button type="submit">Go To HomePage</button>
+</form>
+
+<b>I'm {{name_var}} and my favoriate programming language is {{lang_var}}.</b>
+
+<b>{{data_j}}</b>
+
+{% endblock %}
+
